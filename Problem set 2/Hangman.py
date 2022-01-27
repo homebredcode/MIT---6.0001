@@ -27,7 +27,7 @@ def load_words():
     inFile = open(WORDLIST_FILENAME, 'r')
     # line: string
     line = inFile.readline()
-    # wordlist: list of strings
+    # wordlist: list of stringss
     wordlist = line.split()
     print("  ", len(wordlist), "words loaded.")
     return wordlist

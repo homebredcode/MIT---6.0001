@@ -101,7 +101,11 @@ def get_available_letters(letters_guessed):
             a = a.replace(i, '')
     return a
 
-
+def check_user_input(user):
+    a = string.ascii_lowercase
+    if user in a:
+        return True
+    return False
 
 
 
@@ -134,13 +138,29 @@ def hangman(secret_word):
     a = len(secret_word)
     b = 6
     c = []
+    warning = 3
     print('Welcome to Hangman!')
     print(f'I am thinking of a word that is {a} letters long')
-    print('----------------------------')
+    print('--------------------------------------------------------')
     while b > 0:
+        if warning == 1:
+            print(f'You have 1 warning left')
+        else:
+            print(f'You have {warning} warnings left')
         print(f'You have {b} guesses left')
         print('available letters:', get_available_letters(c))
         user_guess = input('Please guess a letter\n> ').lower()
+        if not check_user_input(user_guess):
+            warning -= 1
+            print(f'OOps! That is not a valid letter.You have {warning} warnings left', get_guessed_word(secret_word, c))
+            print('--------------------------------------------------------')
+            if warning < 1:
+                print('You lost a guess!')
+                b -= 1
+                print('--------------------------------------------------------')
+                warning = 3
+                continue
+            continue
         c.append(user_guess)
         if user_guess in secret_word:
             print('Good guess!', get_guessed_word(secret_word, c))
@@ -150,6 +170,7 @@ def hangman(secret_word):
             print('Congratulations! You Won')
             exit()
         b -= 1
+        print('--------------------------------------------------------')
     print(f'You lost! try again!\nThe word was {secret_word}')
 
 a = choose_word(wordlist)

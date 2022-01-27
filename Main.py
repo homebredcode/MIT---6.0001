@@ -4,4 +4,3 @@ print('wtf dude')
 print('yo whats up')
 
 #lasdlasdlsakdfjsodjkgfsdfokjg
-print("hehexd")

@@ -136,27 +136,37 @@ def hangman(secret_word):
     Follows the other limitations detailed in the problem write-up.
     '''
     a = len(secret_word)
-    b = 6
+    guesses_remaining = 6
     c = []
     warning = 3
+    vowels = ['a', 'e', 'i', 'o', 'u', 'y']
     print('Welcome to Hangman!')
     print(f'I am thinking of a word that is {a} letters long')
     print('--------------------------------------------------------')
-    while b > 0:
+    while guesses_remaining > 0:
         if warning == 1:
             print(f'You have 1 warning left')
         else:
             print(f'You have {warning} warnings left')
-        print(f'You have {b} guesses left')
+        print(f'You have {guesses_remaining} guesses left')
         print('available letters:', get_available_letters(c))
         user_guess = input('Please guess a letter\n> ').lower()
+        if user_guess in c:
+            warning -= 1
+            print(f'Oops! You have already guessed that letter. You now have {warning} warnings left')
+            if warning < 1:
+                guesses_remaining -= 1
+                print(f'You have lost a guess! You now have {guesses_remaining} guesses left')
+                warning = 3
+                continue
+            continue
         if not check_user_input(user_guess):
             warning -= 1
             print(f'OOps! That is not a valid letter.You have {warning} warnings left', get_guessed_word(secret_word, c))
             print('--------------------------------------------------------')
             if warning < 1:
                 print('You lost a guess!')
-                b -= 1
+                guesses_remaining -= 1
                 print('--------------------------------------------------------')
                 warning = 3
                 continue
@@ -164,17 +174,23 @@ def hangman(secret_word):
         c.append(user_guess)
         if user_guess in secret_word:
             print('Good guess!', get_guessed_word(secret_word, c))
+            print('--------------------------------------------------------')
+            if is_word_guessed(secret_word, c):
+                print('Congratulations! You Won')
+                print(f'Your score = {guesses_remaining * len(secret_word)}')
+                exit()
+            continue
         else:
             print('Oops! That letter is not in my word: ', get_guessed_word(secret_word, c))
-        if is_word_guessed(secret_word, c):
-            print('Congratulations! You Won')
-            exit()
-        b -= 1
+            if user_guess in vowels:
+                guesses_remaining -= 2
+                continue
+        guesses_remaining -= 1
         print('--------------------------------------------------------')
     print(f'You lost! try again!\nThe word was {secret_word}')
 
-a = choose_word(wordlist)
-hangman(a)
+# a = choose_word(wordlist)
+# hangman(a)
 
 
 
@@ -197,8 +213,25 @@ def match_with_gaps(my_word, other_word):
         _ , and my_word and other_word are of the same length;
         False otherwise:
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    ###PROBLEM WITH CODE, REPEATING LETTERS DONT WORK, SEE PRINT STATEMENT
+#     my_word = my_word.replace(' ', '')
+#     if not len(my_word) == len(other_word):
+#         return False
+#     for i in my_word:
+#         print(i)
+#         for char in other_word:
+#             print(char)
+#             if i == char:
+#                 other_word = other_word.replace(char, '')
+#                 break
+#             elif i == '_':
+#                 other_word = other_word.replace(char, '')
+#                 break
+#             else:
+#                 return False
+#     return True
+#
+# print(match_with_gaps('app_ _ ', 'apple'))
 
 
 def show_possible_matches(my_word):

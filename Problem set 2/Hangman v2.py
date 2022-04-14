@@ -51,6 +51,7 @@ def choose_word(wordlist):
 wordlist = load_words()
 
 
+
 def is_word_guessed(secret_word, letters_guessed):
     '''
     secret_word: string, the word the user is guessing; assumes all letters are
@@ -188,12 +189,28 @@ def match_with_gaps(my_word, other_word):
         _ , and my_word and other_word are of the same length;
         False otherwise: 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    my_word = my_word.replace(" ", "")
+    a = 0
+    if len(my_word) != len(other_word):
+        return False
+    for c in my_word:
+        if c not in string.ascii_lowercase:
+            if other_word[a] in my_word:
+                return False
+            a += 1
+            continue
+        if c not in other_word:
+            return False
+        else:
+            if my_word[a] != other_word[a]:
+                return False
+        a += 1
+    return True
 
 
 
-def show_possible_matches(my_word):
+
+def show_possible_matches(my_word, wordlist):
     '''
     my_word: string with _ characters, current guess of secret word
     returns: nothing, but should print out every word in wordlist that matches my_word
@@ -203,8 +220,18 @@ def show_possible_matches(my_word):
              that has already been revealed.
 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    my_word = my_word.replace(' ', '')
+    a = 0
+    for s in wordlist:
+        if match_with_gaps(my_word, s):
+            print(s)
+            a += 1
+    if a == 0:
+        print('There was no matching words')
+
+show_possible_matches('a___e', wordlist)
+
+
 
 
 
@@ -251,8 +278,8 @@ def hangman_with_hints(secret_word):
 
     # To test part 2, comment out the pass line above and
     # uncomment the following two lines.
-secret_word = choose_word(wordlist)
-hangman(secret_word)
+# secret_word = choose_word(wordlist)
+# hangman(secret_word)
 
 ###############
     

@@ -224,12 +224,14 @@ def show_possible_matches(my_word, wordlist):
     a = 0
     for s in wordlist:
         if match_with_gaps(my_word, s):
-            print(s)
+            print(s,end=" ")
             a += 1
+            if a % 10 == 0:
+                print('  ')
+    print(' ')
     if a == 0:
         print('There was no matching words')
 
-show_possible_matches('a___e', wordlist)
 
 
 
@@ -262,8 +264,51 @@ def hangman_with_hints(secret_word):
     
     Follows the other limitations detailed in the problem write-up.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    guesses = 6
+    b = ''
+    warning = 3
+    vowels = 'aeioy'
+    print('Welcome to the game of Hangman!\nI am thinking of a word that is', len(secret_word),
+          'letters long')
+    while True:
+        if warning <= 0:
+            print('too many wrong inputs. You lose 1 guess.')
+            guesses -= 1
+        if guesses <= 0:
+            print('No more guesses left')
+            print('The word was', secret_word)
+            break
+        print('----------------------------')
+        print('You have', guesses, 'guesses left.\nAvailable letters: ', get_available_letters(b))
+        user_input = input('Please guess a letter: ').lower()
+        if user_input == '*':
+            l = get_guessed_word(secret_word, b)
+            print('Possible matches:')
+            show_possible_matches(l, wordlist)
+            continue
+        if user_input not in string.ascii_lowercase:
+            warning -= 1
+            print('Oops! That is not not a valid letter. You have', warning, 'warnings left')
+            continue
+        if user_input in b:
+            warning -= 1
+            print('This letter has already been guessed. You lose one warning')
+            print(warning, 'warnings left')
+            continue
+        b += user_input
+        if user_input in secret_word:
+            print('Good guess!: ', get_guessed_word(secret_word, b))
+        else:
+            print('Oops! That letter is not in my word: ', get_guessed_word(secret_word, b))
+            if user_input in vowels:
+                guesses -= 2
+                continue
+            guesses -= 1
+        if is_word_guessed(secret_word, b):
+            print('Congratulations, you won!\n Your total score for this game is:', len(set(secret_word)) * guesses)
+            break
+secret_word = choose_word(wordlist)
+hangman_with_hints(secret_word)
 
 
 

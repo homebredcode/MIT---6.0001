@@ -101,10 +101,6 @@ def get_word_score(word, n):
         score *= component
     return score
 
-print(get_word_score('hello', 9))
-
-
-
 
 
 #

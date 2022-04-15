@@ -94,7 +94,6 @@ def get_word_score(word, n):
     word = word.lower()
     score = 0
     component = ((7*len(word))-(3*(n-len(word))))
-    print(component)
     for letter in word:
         if letter in SCRABBLE_LETTER_VALUES:
             score += SCRABBLE_LETTER_VALUES[letter]

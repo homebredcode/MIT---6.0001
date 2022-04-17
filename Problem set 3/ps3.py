@@ -11,6 +11,7 @@ import math
 import random
 import string
 
+ASTERISK = '*'
 VOWELS = 'aeiou'
 CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 HAND_SIZE = 7
@@ -145,15 +146,16 @@ def deal_hand(n):
     hand={}
     num_vowels = int(math.ceil(n / 3))
 
-    for i in range(num_vowels):
+    for i in range(num_vowels-1):
         x = random.choice(VOWELS)
         hand[x] = hand.get(x, 0) + 1
-    
+    hand[ASTERISK] = hand.get(ASTERISK, 0) + 1
     for i in range(num_vowels, n):    
         x = random.choice(CONSONANTS)
         hand[x] = hand.get(x, 0) + 1
     
     return hand
+
 
 #
 # Problem #2: Update a hand by removing letters
@@ -190,6 +192,8 @@ def update_hand(hand, word):
 #
 # Problem #3: Test word validity
 #
+
+
 def is_valid_word(word, hand, word_list):
     """
     Returns True if word is in the word_list and is entirely
@@ -201,8 +205,38 @@ def is_valid_word(word, hand, word_list):
     word_list: list of lowercase strings
     returns: boolean
     """
+    word2 = word.lower()
+    word3 = word.lower()
+    hand2 = hand.copy()
 
-    pass  # TO DO... Remove this line when you implement this function
+    if '*' in word3:
+        for c in VOWELS:
+            word3 = word3.replace('*', c)
+            if word3 in word_list:
+                word2 = word3
+                break
+            word3 = word2
+
+
+
+    if word2 not in word_list:
+        return False
+
+    for c in word2:
+        if c not in hand2.keys():
+            return False
+        hand2[c] = hand2.get(c, 0) - 1
+        if hand2[c] == 0:
+            del hand2[c]
+
+    return True
+x = load_words()
+is_valid_word('h*ney', {'h': 1, 'n': 1, 'e': 1, 'y': 1, '*': 1}, x)
+
+
+
+
+
 
 #
 # Problem #5: Playing a hand

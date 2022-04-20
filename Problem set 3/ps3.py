@@ -210,18 +210,19 @@ def is_valid_word(word, hand, word_list):
     hand2 = hand.copy()
 
     if '*' in word3:
-        for c in VOWELS:
-            word3 = word3.replace('*', c)
-            if word3 in word_list:
-                word2 = word3
-                break
-            word3 = word2
-
-
+        if '*' in hand:
+            for c in VOWELS:
+                word3 = word3.replace('*', c)
+                if word3 in word_list:
+                    hand2[c] = 1
+                    word2 = word3
+                    break
+                word3 = word2
+        else:
+            return False
 
     if word2 not in word_list:
         return False
-
     for c in word2:
         if c not in hand2.keys():
             return False
@@ -230,8 +231,9 @@ def is_valid_word(word, hand, word_list):
             del hand2[c]
 
     return True
-x = load_words()
-is_valid_word('h*ney', {'h': 1, 'n': 1, 'e': 1, 'y': 1, '*': 1}, x)
+
+#x = load_words()
+#print(is_valid_word('h*ney', {'h': 1, 'n': 1, 'e': 1, 'y': 1, '*': 1}, x))
 
 
 
@@ -248,8 +250,10 @@ def calculate_handlen(hand):
     hand: dictionary (string-> int)
     returns: integer
     """
-    
-    pass  # TO DO... Remove this line when you implement this function
+    a = 0
+    for i in hand:
+        a += hand[i]
+    return a
 
 def play_hand(hand, word_list):
 
@@ -288,23 +292,30 @@ def play_hand(hand, word_list):
     # As long as there are still letters left in the hand:
     
         # Display the hand
-        
+    while True:
+        print('Current hand:')
+        display_hand(hand)
         # Ask user for input
-        
+        user_input = input('Enter a word or "!!" to indicate that you are finished: ')
         # If the input is two exclamation points:
-        
+        if user_input == '!!':
             # End the game (break out of the loop)
-
-            
+            break
         # Otherwise (the input is not two exclamation points):
 
             # If the word is valid:
-
+        if is_valid_word(user_input, hand, word_list):
+            print(f'"{user_input}" earned:', get_word_score(user_input, calculate_handlen(hand)))
+            hand = update_hand(hand, user_input)
                 # Tell the user how many points the word earned,
                 # and the updated total score
 
             # Otherwise (the word is not valid):
+        else:
+            print('That is not a valid word. please chose another word.')
+            hand = update_hand(hand, user_input)
                 # Reject invalid word (print a message)
+        display_hand(hand)
                 
             # update the user's hand by removing the letters of their inputted word
             
@@ -313,7 +324,8 @@ def play_hand(hand, word_list):
     # so tell user the total score
 
     # Return the total score as result of function
-
+word_list = load_words()
+play_hand(deal_hand(10), word_list)
 
 
 #
@@ -391,7 +403,7 @@ def play_game(word_list):
 # Do not remove the "if __name__ == '__main__':" line - this code is executed
 # when the program is run directly, instead of through an import statement
 #
-if __name__ == '__main__':
+#if __name__ == '__main__':
     word_list = load_words()
     play_game(word_list)
 

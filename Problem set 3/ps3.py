@@ -213,15 +213,23 @@ def is_valid_word(word, hand, word_list):
         if '*' in hand:
             for c in VOWELS:
                 word3 = word3.replace('*', c)
+                print(word3)
                 if word3 in word_list:
                     hand2[c] = 1
                     word2 = word3
                     break
-                word3 = word2
-        else:
-            return False
-
+                word3 = word.lower()
+            if '*' in word3:
+                for c in CONSONANTS:
+                    word3 = word3.replace('*', c)
+                    print(word3)
+                    if word3 in word_list:
+                        hand2[c] = 1
+                        word2 = word3
+                        break
+                    word3 = word2
     if word2 not in word_list:
+        print(word2)
         return False
     for c in word2:
         if c not in hand2.keys():
@@ -288,6 +296,7 @@ def play_hand(hand, word_list):
     
     # BEGIN PSEUDOCODE <-- Remove this comment when you implement this function
     # Keep track of the total score
+    total_score = 0
     
     # As long as there are still letters left in the hand:
     
@@ -305,6 +314,7 @@ def play_hand(hand, word_list):
 
             # If the word is valid:
         if is_valid_word(user_input, hand, word_list):
+            total_score += get_word_score(user_input, calculate_handlen(hand))
             print(f'"{user_input}" earned:', get_word_score(user_input, calculate_handlen(hand)))
             hand = update_hand(hand, user_input)
                 # Tell the user how many points the word earned,
@@ -315,6 +325,7 @@ def play_hand(hand, word_list):
             print('That is not a valid word. please chose another word.')
             hand = update_hand(hand, user_input)
                 # Reject invalid word (print a message)
+        print(f'Total score is: {total_score}')
         display_hand(hand)
                 
             # update the user's hand by removing the letters of their inputted word

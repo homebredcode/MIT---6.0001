@@ -213,7 +213,6 @@ def is_valid_word(word, hand, word_list):
         if '*' in hand:
             for c in VOWELS:
                 word3 = word3.replace('*', c)
-                print(word3)
                 if word3 in word_list:
                     hand2[c] = 1
                     word2 = word3
@@ -222,14 +221,12 @@ def is_valid_word(word, hand, word_list):
             if '*' in word3:
                 for c in CONSONANTS:
                     word3 = word3.replace('*', c)
-                    print(word3)
                     if word3 in word_list:
                         hand2[c] = 1
                         word2 = word3
                         break
                     word3 = word2
     if word2 not in word_list:
-        print(word2)
         return False
     for c in word2:
         if c not in hand2.keys():
@@ -327,6 +324,8 @@ def play_hand(hand, word_list):
                 # Reject invalid word (print a message)
         print(f'Total score is: {total_score}')
         display_hand(hand)
+        if not hand:
+            break
                 
             # update the user's hand by removing the letters of their inputted word
             
@@ -336,7 +335,7 @@ def play_hand(hand, word_list):
 
     # Return the total score as result of function
 word_list = load_words()
-play_hand(deal_hand(10), word_list)
+play_hand(deal_hand(HAND_SIZE), word_list)
 
 
 #
@@ -370,9 +369,24 @@ def substitute_hand(hand, letter):
     letter: string
     returns: dictionary (string -> int)
     """
-    
-    pass  # TO DO... Remove this line when you implement this function
-       
+    hand2 = hand.copy()
+    a = []
+    b = 0
+    for i in VOWELS:
+        a.append(i)
+    for i in CONSONANTS:
+        a.append(i)
+    for i in range(hand2[letter]):
+        b += 1
+
+    for i in a:
+        new_letter = random.choice(a)
+        if new_letter not in hand2:
+            hand2[new_letter] = b
+            if letter in hand2:
+                del hand2[letter]
+            return hand2
+# print(substitute_hand({'a': 2, 'b':3}, 'b'))
     
 def play_game(word_list):
     """

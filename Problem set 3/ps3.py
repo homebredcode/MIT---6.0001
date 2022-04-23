@@ -334,8 +334,7 @@ def play_hand(hand, word_list):
     # so tell user the total score
 
     # Return the total score as result of function
-word_list = load_words()
-play_hand(deal_hand(HAND_SIZE), word_list)
+# play_hand(deal_hand(HAND_SIZE), word_list)
 
 
 #
@@ -382,11 +381,11 @@ def substitute_hand(hand, letter):
     for i in a:
         new_letter = random.choice(a)
         if new_letter not in hand2:
-            hand2[new_letter] = b
-            if letter in hand2:
-                del hand2[letter]
-            return hand2
-# print(substitute_hand({'a': 2, 'b':3}, 'b'))
+            if new_letter != letter:
+                hand2[new_letter] = b
+                if letter in hand2:
+                    del hand2[letter]
+                return hand2
     
 def play_game(word_list):
     """
@@ -418,9 +417,20 @@ def play_game(word_list):
 
     word_list: list of lowercase strings
     """
-    
-    print("play_game not implemented.") # TO DO... Remove this line when you implement this function
-    
+    b = 0
+    while not b:
+        a = 0
+        hand = deal_hand(HAND_SIZE)
+        display_hand(hand)
+        substitute = input('Do you want to subsitute one letter for another? yes/no: ')
+        if substitute == 'yes':
+            new_letter = input('What letter do you want to substitute: ')
+            hand = substitute_hand(hand, new_letter)
+        play_hand(hand, word_list)
+        hey = input('Do you want to replay? yes/no: ')
+        if hey == 'no':
+            b += 1
+
 
 
 #
@@ -428,7 +438,7 @@ def play_game(word_list):
 # Do not remove the "if __name__ == '__main__':" line - this code is executed
 # when the program is run directly, instead of through an import statement
 #
-#if __name__ == '__main__':
+if __name__ == '__main__':
     word_list = load_words()
     play_game(word_list)
 

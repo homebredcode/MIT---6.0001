@@ -17,23 +17,35 @@ def get_permutations(sequence):
 
     Example:
     >>> get_permutations('abc')
-    ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
+    ['abc', 'bac', 'bca', 'acb', 'cab', 'cba']
 
     Note: depending on your implementation, you may return the permutations in
     a different order than what is listed here.
     '''
     if len(sequence) == 1:
-        return sequence
+        return [sequence]
     else:
-        return
+        permutations = []
+        first_character = sequence[0]
+        subsequent_characters = sequence[1:]
+        permutations_without_first_character = get_permutations(subsequent_characters)
+
+        for sequence in permutations_without_first_character:
+            for index in range(len(sequence)+1):
+                new_perm = sequence[0:index] + first_character + sequence[index:len(sequence)+1]
+                permutations.append(new_perm)
+        return permutations
+
+
+        
 print(get_permutations('abc'))
 
-#if __name__ == '__main__':
-#    #EXAMPLE
-#    example_input = 'abc'
-#    print('Input:', example_input)
-#    print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
-#    print('Actual Output:', get_permutations(example_input))
+if __name__ == '__main__':
+   #EXAMPLE
+   example_input = 'abc'
+   print('Input:', example_input)
+   print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
+   print('Actual Output:', get_permutations(example_input))
     
 #    # Put three example test cases here (for your sanity, limit your inputs
 #    to be three characters or fewer as you will have n! permutations for a 

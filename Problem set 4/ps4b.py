@@ -26,6 +26,7 @@ def load_words(file_name):
     print("  ", len(wordlist), "words loaded.")
     return wordlist
 
+# wordlist = load_words('words.txt')
 def is_word(word_list, word):
     '''
     Determines if word is a valid word, ignoring
@@ -36,12 +37,12 @@ def is_word(word_list, word):
     
     Returns: True if word is in word_list, False otherwise
 
-    Example:
-    >>> is_word(word_list, 'bat') returns
-    True
-    >>> is_word(word_list, 'asdf') returns
-    False
-    '''
+    # Example:
+    # >>> is_word(word_list, 'bat') returns
+    # True
+    # >>> is_word(word_list, 'asdf') returns
+    # False
+    # '''
     word = word.lower()
     word = word.strip(" !@#$%^&*()-_+={}[]|\:;'<>?,./\"")
     return word in word_list
@@ -70,7 +71,8 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words('words.txt')
 
     def get_message_text(self):
         '''
@@ -78,7 +80,7 @@ class Message(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,8 +89,8 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
-
+        copy_valid_words = self.valid_words.copy()
+        return copy_valid_words
     def build_shift_dict(self, shift):
         '''
         Creates a dictionary that can be used to apply a cipher to a letter.
@@ -103,7 +105,22 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        assert (0 <= shift) and (shift < 26), 'not valid shift value'
+
+        alphabet_lowers = string.ascii_lowercase
+        alphabet_uppers = string.ascii_uppercase
+        map_letters = {}
+        #Loop over lower and uppercase characters, upper_or_lower becomes a string
+        for upper_or_lower in (alphabet_lowers, alphabet_uppers):
+            for letter in upper_or_lower:
+                #if the index of letter + shift is greater than 26, get the difference between them to simulate starting at index 0; 'a' after 26
+                if (upper_or_lower.index(letter) + shift) >= 26:
+                    map_letters[letter] = upper_or_lower[abs((upper_or_lower.index(letter)+shift)-26)]
+                #else simply map letter to the shifted character
+                else:
+                    map_letters[letter] = upper_or_lower[upper_or_lower.index(letter)+shift]
+        return map_letters
+
 
     def apply_shift(self, shift):
         '''
@@ -117,11 +134,25 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        shifted_dict = self.build_shift_dict(shift)
+        shifted_text = ''
+        punct = '!()-[]{};:\'\"\\,<>./?@#$%^&*_~ '
 
+        for char in self.message_text:
+            if char not in punct:
+                new_char = shifted_dict[char]
+                shifted_text += new_char
+            else:
+                new_char = char
+                shifted_text += new_char
+
+        return shifted_text
+
+# ab = Message('hello there!')
+# print(ab.apply_shift(1))
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
-        '''
+        """
         Initializes a PlaintextMessage object        
         
         text (string): the message's text
@@ -134,8 +165,9 @@ class PlaintextMessage(Message):
             self.encryption_dict (dictionary, built using shift)
             self.message_text_encrypted (string, created using shift)
 
-        '''
-        pass #delete this line and replace with your code here
+        """
+        Message.__init__(self, text)
+        self.shift = shift
 
     def get_shift(self):
         '''
@@ -204,7 +236,7 @@ class CiphertextMessage(Message):
         and the decrypted message text using that shift value
         '''
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
 #    #Example test case (PlaintextMessage)
 #    plaintext = PlaintextMessage('hello', 2)

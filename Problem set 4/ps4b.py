@@ -26,7 +26,7 @@ def load_words(file_name):
     print("  ", len(wordlist), "words loaded.")
     return wordlist
 
-# wordlist = load_words('words.txt')
+wordlist = load_words('words.txt')
 def is_word(word_list, word):
     '''
     Determines if word is a valid word, ignoring
@@ -216,7 +216,7 @@ class PlaintextMessage(Message):
 
 
 
-class CiphertextMessage(Message):
+class CiphertextMessage(PlaintextMessage):
     def __init__(self, text):
         '''
         Initializes a CiphertextMessage object
@@ -228,6 +228,7 @@ class CiphertextMessage(Message):
             self.valid_words (list, determined using helper function load_words)
         '''
         Message.__init__(self, text)
+        self.valid_words = load_words('words.txt')
 
     def decrypt_message(self):
         '''
@@ -245,7 +246,25 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-ab = CiphertextMessage('hello')
+        message_list = Message.get_message_text(self)
+        message_list2 = message_list.split(" ")
+        counter = 0
+
+        for shift in range(1,27):
+            PlaintextMessage.change_shift(self, shift)
+            for word in message_list2:
+                print(word)
+
+
+
+
+
+
+
+
+
+ab = CiphertextMessage('jelly sanitarian wallpapers watchwords')
+ab.decrypt_message()
 # if __name__ == '__main__':
 
 #    #Example test case (PlaintextMessage)

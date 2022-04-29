@@ -26,7 +26,7 @@ def load_words(file_name):
     print("  ", len(wordlist), "words loaded.")
     return wordlist
 
-wordlist = load_words('words.txt')
+# wordlist = load_words('words.txt')
 def is_word(word_list, word):
     '''
     Determines if word is a valid word, ignoring
@@ -72,7 +72,7 @@ class Message(object):
             self.valid_words (list, determined using helper function load_words)
         '''
         self.message_text = text
-        self.valid_words = load_words('words.txt')
+        # self.valid_words = load_words('words.txt')
 
     def get_message_text(self):
         '''
@@ -89,8 +89,8 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        copy_valid_words = self.valid_words.copy()
-        return copy_valid_words
+        # copy_valid_words = self.valid_words.copy()
+        # return copy_valid_words
     def build_shift_dict(self, shift):
         '''
         Creates a dictionary that can be used to apply a cipher to a letter.
@@ -105,7 +105,7 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        assert (0 <= shift) and (shift < 26), 'not valid shift value'
+        assert (0 <= shift) and (shift <= 26), f'not valid shift value: {shift}'
 
         alphabet_lowers = string.ascii_lowercase
         alphabet_uppers = string.ascii_uppercase
@@ -166,9 +166,9 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         """
-        Message.__init__(self, text)
+        Message.__init__(self, text, shift)
         self.shift = shift
-        self.valid_words = load_words('words.txt')
+        # self.valid_words = load_words('words.txt')
         self.encryption_dict = super().build_shift_dict(shift)
         self.message_text_encrypted = super().apply_shift(shift)
 
@@ -208,7 +208,7 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        assert 0 <= shift <= 26, 'not valid shift value'
+        assert 0 <= shift <= 26, f'shift not valid value: {shift}'
         self.shift = shift
         self.encryption_dict = super().build_shift_dict(shift)
         self.message_text_encrypted = super().apply_shift(shift)
@@ -228,7 +228,7 @@ class CiphertextMessage(PlaintextMessage):
             self.valid_words (list, determined using helper function load_words)
         '''
         Message.__init__(self, text)
-        self.valid_words = load_words('words.txt')
+        # self.valid_words = load_words('words.txt')
 
     def decrypt_message(self):
         '''
@@ -246,14 +246,23 @@ class CiphertextMessage(PlaintextMessage):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        message_list = Message.get_message_text(self)
-        message_list2 = message_list.split(" ")
         counter = 0
+        wordlist = load_words('words.txt')
+        deciphered_text = ''
 
         for shift in range(1,27):
             PlaintextMessage.change_shift(self, shift)
-            for word in message_list2:
-                print(word)
+            ciphered_text = Message.apply_shift(self, shift)
+            ciphered_text = ciphered_text.split(' ')
+            for word in ciphered_text:
+                if is_word(wordlist, word):
+                    counter += 1
+                    deciphered_text += ' ' + word
+                    if counter == len(ciphered_text):
+                        deciphered_text = deciphered_text.strip()
+                        return shift, deciphered_text
+            deciphered_text = ''
+            counter = 0
 
 
 
@@ -263,8 +272,10 @@ class CiphertextMessage(PlaintextMessage):
 
 
 
-ab = CiphertextMessage('jelly sanitarian wallpapers watchwords')
-ab.decrypt_message()
+
+
+ab = CiphertextMessage('jgnnq')
+print(ab.decrypt_message())
 # if __name__ == '__main__':
 
 #    #Example test case (PlaintextMessage)

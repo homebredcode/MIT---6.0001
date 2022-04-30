@@ -258,7 +258,7 @@ class CiphertextMessage(PlaintextMessage):
                 if is_word(wordlist, word):
                     counter += 1
                     deciphered_text += ' ' + word
-                    if counter == len(ciphered_text):
+                    if counter >= len(ciphered_text)-5:
                         deciphered_text = deciphered_text.strip()
                         return shift, deciphered_text
             deciphered_text = ''
@@ -274,7 +274,7 @@ class CiphertextMessage(PlaintextMessage):
 
 
 
-ab = CiphertextMessage('jgnnq')
+ab = CiphertextMessage('Xoqy Tzcfs wg o amhvwqoz qvofoqhsf qfsohsr cb hvs gdif ct o acasbh hc vszd qcjsf ob wbgittwqwsbhzm dzobbsr voqy. Vs vog pssb fsuwghsfsr tcf qzoggsg oh AWH hkwqs pstcfs, pih vog fsdcfhsrzm bsjsf doggsr o qzogg. Wh vog pssb hvs hforwhwcb ct hvs fsgwrsbhg ct Sogh Qoadig hc psqcas Xoqy Tzcfs tcf o tsk bwuvhg soqv msof hc sriqohs wbqcawbu ghirsbhg wb hvs komg, asobg, obr shvwqg ct voqywbu.')
 print(ab.decrypt_message())
 # if __name__ == '__main__':
 

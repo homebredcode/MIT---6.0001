@@ -95,9 +95,28 @@ class Trigger(object):
 # Problem 2
 # TODO: PhraseTrigger
 class PhraseTrigger(Trigger):
-    def __init__(self):
+    def __init__(self, phrase):
+        Trigger.__init__(self)
+        self.phrase = phrase.lower()
+
+    def is_phrase_in(self, text):
+        for char in text:
+            if char in string.punctuation:
+                text = text.replace(char, ' ')
+        text = text.lower()
+        text = text.split()
+        self.phrase = self.phrase.split()
+        for word in self.phrase:
+            if word not in text:
+                return False
+
+        return True
+
+
 
     def evaluate(self, story):
+        pass
+
 
 
 # Problem 3

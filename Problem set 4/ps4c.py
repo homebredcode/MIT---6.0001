@@ -180,8 +180,8 @@ class EncryptedSubMessage(SubMessage):
         valid_words = self.get_valid_words()
         new_string = []
         for perm in permutations_vowels:
-            transposedict = self.build_transpose_dict(perm)
-            apply_dict = self.apply_transpose(transposedict)
+            transpose_dict = self.build_transpose_dict(perm)
+            apply_dict = self.apply_transpose(transpose_dict)
             word_list = apply_dict.split(' ')
             for word in word_list:
                 if is_word(valid_words, word):
